@@ -59,7 +59,7 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_ANDROID_SIGNING_KEY: ${{ secrets.ANDROID_KEY_ALIAS }}
           ORG_GRADLE_PROJECT_ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          ORG_GRADLE_PROJECT_ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ORG_GRADLE_PROJECT_ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
           ORG_GRADLE_PROJECT_ANDROID_KEY_FILE: ${{ env.ANDROID_KEY_FILE }}
         run: ./gradlew :app:bundleProdRelease --no-daemon --stacktrace
 
