@@ -30,19 +30,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           # androidGitVersion needs full history + tags to compute versionCode/versionName.
           fetch-depth: 0
 
       - name: Set up JDK 17
-        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b # v4.3.0
+        uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
 
       - name: Decode upload keystore
         env:
@@ -73,6 +73,12 @@ jobs:
           fi
           echo "aab=$AAB_PATH" >> "$GITHUB_OUTPUT"
 
+          # AGP emits native-debug-symbols.zip when buildTypes.release sets
+          # ndk.debugSymbolLevel = 'FULL' (it does in app/build.gradle). Upload
+          # it alongside the AAB so Play can symbolicate native crashes.
+          SYMBOLS_PATH=$(find app/build/outputs/native-debug-symbols/prodRelease -name 'native-debug-symbols.zip' 2>/dev/null | head -n1)
+          echo "symbols=$SYMBOLS_PATH" >> "$GITHUB_OUTPUT"
+
           PACKAGE_NAME=$(./gradlew -q :app:properties \
             | awk -F': ' '/^namespace: /{print $2; exit}')
           if [ -z "$PACKAGE_NAME" ]; then
@@ -99,5 +105,6 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: ${{ steps.artifacts.outputs.package }}
           releaseFiles: ${{ steps.artifacts.outputs.aab }}
-          track: ${{ env.PLAY_TRACK }}
+          debugSymbols: ${{ steps.artifacts.outputs.symbols }}
+          tracks: ${{ env.PLAY_TRACK }}
           status: completed
