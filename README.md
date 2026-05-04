@@ -25,7 +25,7 @@ Developer API.
 | Secret | Purpose |
 | --- | --- |
 | `ANDROID_KEYSTORE_BASE64` | Base64-encoded upload keystore (`base64 -w0 upload.keystore`) |
-| `ANDROID_KEYSTORE_PASSWORD` | Keystore (store) password |
+| `ANDROID_STORE_PASSWORD` | Keystore (store) password |
 | `ANDROID_KEY_ALIAS` | Key alias inside the keystore |
 | `ANDROID_KEY_PASSWORD` | Password for the key entry |
 | `PLAY_SERVICE_ACCOUNT_JSON` | Full JSON for a Google Play service account with `Release Manager` permissions |
