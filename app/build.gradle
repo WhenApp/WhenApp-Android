@@ -36,6 +36,14 @@ android {
                 storePassword ANDROID_STORE_PASSWORD
             }
         }
+        releaseApp {
+            if(project.hasProperty('ANDROID_SIGNING_KEY')) {
+                keyAlias ANDROID_SIGNING_KEY
+                keyPassword ANDROID_KEY_PASSWORD
+                storeFile file(ANDROID_KEY_FILE)
+                storePassword ANDROID_STORE_PASSWORD
+            }
+        }
     }
     defaultConfig {
         applicationId "tech.akpmakes.android.taskkeeper"
@@ -51,6 +59,9 @@ android {
     }
     buildTypes {
         release {
+            if(project.hasProperty('ANDROID_SIGNING_KEY')) {
+                signingConfig signingConfigs.releaseApp
+            }
             minifyEnabled true
             shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
